@@ -4,8 +4,14 @@ type Link {
     description: String!
 }
 
+type Person {
+	name: String!
+	born: Int
+}
+
 type Query {
     allLinks: [Link]
+    allPersons: [Person]
 }
 
 type Mutation {
