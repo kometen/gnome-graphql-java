@@ -1,16 +1,16 @@
 package no.gnome.graphql;
 
-public class Person {
+public class User {
 
 	private final String id;
 	private final String name;
 	private final Integer born;
 	
-	public Person(String name, Integer born) {
+	public User(String name, Integer born) {
 		this(null, name, born);
 	}
 
-	public Person(String id, String name, Integer born) {
+	public User(String id, String name, Integer born) {
 		this.id = id;
 		this.name = name;
 		this.born = born;

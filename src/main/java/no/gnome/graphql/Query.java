@@ -7,18 +7,18 @@ import com.coxautodev.graphql.tools.GraphQLRootResolver;
 public class Query implements GraphQLRootResolver {
 
 	private final LinkRepository linkRepository;
-	private final PersonRepository personRepository;
+	private final UserRepository userRepository;
 	
-	public Query(LinkRepository linkRepository, PersonRepository personRepository) {
+	public Query(LinkRepository linkRepository, UserRepository userRepository) {
 		this.linkRepository = linkRepository;
-		this.personRepository = personRepository;
+		this.userRepository = userRepository;
 	}
 	
 	public List<Link> allLinks() {
 		return linkRepository.getAllLinks();
 	}
 
-	public List<Person> allPersons() {
-		return personRepository.getAllPersons();
+	public List<User> allUsers() {
+		return userRepository.getAllUsers();
 	}
 }

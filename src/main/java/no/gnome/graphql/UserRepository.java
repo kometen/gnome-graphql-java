@@ -12,22 +12,22 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.regex;
 
-public class PersonRepository {
+public class UserRepository {
 
-	private final List<Person> persons;
+	private final List<User> users;
 
-	public PersonRepository() {
-		persons = new ArrayList<>();
-		persons.add(new Person("Claus Guttesen", 1967));
-		persons.add(new Person("Eline Kleppenes", 2000));
+	public UserRepository() {
+		users = new ArrayList<>();
+		users.add(new User("Claus Guttesen", 1967));
+		users.add(new User("Eline Kleppenes", 2000));
 	}
 
-	public List<Person> getAllPersons() {
-		return persons;
+	public List<User> getAllUsers() {
+		return users;
 	}
 
-	public void savePerson(Person person) {
-		persons.add(person);
+	public void saveUser(User user) {
+		users.add(user);
 	}
 
 /*	private final MongoCollection<Document> links;
