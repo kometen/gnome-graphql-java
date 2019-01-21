@@ -3,5 +3,6 @@
 /Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/Link.java
 /Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/User.java
 /Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/Mutation.java
+/Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/DBConnection.java
 /Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/Query.java
 /Users/claus/devel/graphql/gnome-graphql-java/src/main/java/no/gnome/graphql/UserRepository.java

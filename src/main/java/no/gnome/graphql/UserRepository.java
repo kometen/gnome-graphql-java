@@ -3,31 +3,61 @@ package no.gnome.graphql;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mongodb.client.MongoCollection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
-
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.regex;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.any.Any;
+import com.jsoniter.output.EncodingMode;
+import com.jsoniter.output.JsonStream;
+import com.jsoniter.spi.DecodingMode;
 
 public class UserRepository {
 
-	private final List<User> users;
+	private Connection conn;
+
+	private String query = "";
 
 	public UserRepository() {
-		users = new ArrayList<>();
-		users.add(new User("Claus Guttesen", 1967));
-		users.add(new User("Eline Kleppenes", 2000));
+	}
+
+	public UserRepository(Connection conn) {
+		this.conn = conn;
 	}
 
 	public List<User> getAllUsers() {
-		return users;
+		List<User> allUsers = new ArrayList<>();
+		query = "select * from users";
+		try {
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next()) {
+				Any jsonObject = JsonIterator.deserialize(rs.getString("json_data"));
+				System.out.println(rs.getString(1));
+				System.out.println(jsonObject.get("name").toString());
+				allUsers.add(new User(rs.getString(1), jsonObject.get("name").toString(), jsonObject.get("born").toInt()));
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return allUsers;
 	}
 
 	public void saveUser(User user) {
-		users.add(user);
+		String json = JsonStream.serialize(new User(user.getName(), user.getBorn()));
+		System.out.println(json);
+		query = "insert into users (json_data) values (?::jsonb)";
+		try {
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setString(1, json);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 /*	private final MongoCollection<Document> links;
@@ -39,21 +69,6 @@ public class UserRepository {
 	public Link findById(String id) {
 		Document doc = links.find(eq("_id", new ObjectId(id))).first();
 		return link(doc);
-	}
-	
-	public List<Link> getAllLinks() {
-		List<Link> allLinks = new ArrayList<>();
-		for (Document doc : links.find()) {
-			allLinks.add(link(doc));
-		}
-		return allLinks;
-	}
-	
-	public void saveLink(Link link) {
-		Document doc = new Document();
-		doc.append("url", link.getUrl());
-		doc.append("description", link.getDescription());
-		links.insertOne(doc);
 	}
 	
 	private Link link(Document doc) {

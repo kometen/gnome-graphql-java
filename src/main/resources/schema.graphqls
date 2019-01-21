@@ -5,6 +5,7 @@ type Link {
 }
 
 type User {
+    id: ID!
 	name: String!
 	born: Int
 }
@@ -16,6 +17,7 @@ type Query {
 
 type Mutation {
     createLink(url: String!, description: String!): Link
+    createUser(name: String!, born: Int!): User
 }
 
 schema {

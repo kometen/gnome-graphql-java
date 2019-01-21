@@ -20,11 +20,8 @@ import java.util.logging.Logger;
 @WebServlet(urlPatterns = "/graphql")
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
-	public static final String postgres_url = "jdbc:postgresql://localhost:5432/graphql";
-	public static final String postgres_user = "claus";
-	public static final String postgres_pwd = "";
-	private static final long serialVersionUID = 1L;
 	private static final LinkRepository linkRepository;
+	private static final UserRepository userRepository;
 
 	static {
         //Change to `new MongoClient("mongodb://<host>:<port>/hackernews")`
@@ -32,17 +29,8 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
 		MongoDatabase mongo = new MongoClient().getDatabase("graphql");
 		linkRepository = new LinkRepository(mongo.getCollection("links"));
 
-	    try {
-	    	Connection con = DriverManager.getConnection(postgres_url, postgres_user, postgres_pwd);
-	        Statement st = con.createStatement();
-	        ResultSet rs = st.executeQuery("SELECT VERSION()");
-
-	        if (rs.next()) {
-	            System.out.println(rs.getString(1));
-	        }
-	    } catch (SQLException ex) {
-	    }
-
+		DBConnection dbconn = new DBConnection();
+		userRepository = new UserRepository(dbconn.getDBConnection());
 	}
 	
 	public GraphQLEndpoint() {
@@ -50,10 +38,9 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
 	}
 	
 	private static GraphQLSchema buildSchema() {
-		UserRepository userRepository = new UserRepository();
 		return SchemaParser.newParser()
 				.file("schema.graphqls")
-				.resolvers(new Query(linkRepository, userRepository), new Mutation(linkRepository))
+				.resolvers(new Query(linkRepository, userRepository), new Mutation(linkRepository, userRepository))
 				.build()
 				.makeExecutableSchema();
 	}

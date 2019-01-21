@@ -4,13 +4,13 @@ public class User {
 
 	private final String id;
 	private final String name;
-	private final Integer born;
+	private final int born;
 	
-	public User(String name, Integer born) {
+	public User(String name, int born) {
 		this(null, name, born);
 	}
 
-	public User(String id, String name, Integer born) {
+	public User(String id, String name, int born) {
 		this.id = id;
 		this.name = name;
 		this.born = born;
